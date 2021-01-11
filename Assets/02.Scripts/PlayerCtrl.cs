@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerCtrl : MonoBehaviour
 {
-    
-    public float maxSpeed = 5f;
+
+    public float maxSpeed =5f;
     public float moveForce = 100f;
     public float jumpForce = 500f;
 
@@ -14,6 +14,9 @@ public class PlayerCtrl : MonoBehaviour
 
     //빠른달리기
     bool fastRun = false;
+
+    //방향구분
+    bool dirRight = true;//기본방향이 오른쪽이므로
 
 
     Rigidbody2D rigid;
@@ -25,6 +28,10 @@ public class PlayerCtrl : MonoBehaviour
     Transform groundCheck;
     bool isGround = false;
 
+    //정면충돌체크
+    Transform frontCheck;
+    public bool isFront = false;
+
     //애니메이터
     Animator anim;
 
@@ -34,15 +41,10 @@ public class PlayerCtrl : MonoBehaviour
         spr = gameObject.GetComponent<SpriteRenderer>();
         anim = gameObject.GetComponent<Animator>();
         groundCheck = GameObject.FindGameObjectWithTag("groundCheck").transform;
+        frontCheck = transform.Find("frontCheck").transform;
     }
 
-    //public void jumpUp()
-    //{
-    //    if(isGround)
-    //    {
-    //        jump = true;
-    //    }
-    //}
+
 
     // Update is called once per frame
     void Update()
@@ -53,13 +55,16 @@ public class PlayerCtrl : MonoBehaviour
         transform.position = wordlPos;
 
         //좌우방향키 입력시 왼쪽으로이동시엔 스프라이트 방향전환
-        if(Input.GetButton("Horizontal"))
-            spr.flipX = (Input.GetAxisRaw("Horizontal") == -1);
+        //if(Input.GetButton("Horizontal"))
+        //    spr.flipX = (Input.GetAxisRaw("Horizontal") == -1);
 
-        //레이어가 Ground인 대상과 충돌판정이 있을시 
+        //레이어가 Ground인 대상과 상하 충돌반응이 있을 경우
         isGround = Physics2D.Linecast(this.transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
+
+        //레이어가 Ground인 대상과 좌우 충돌반응이 있을 경우
+        isFront = Physics2D.Linecast(this.transform.position, frontCheck.position, 1 << LayerMask.NameToLayer("Ground"));
         //캐릭터가 공중에서 떨어지는중에 땅에 닿았을때
-        if(rigid.velocity.y<0 &&isGround)
+        if (rigid.velocity.y<0 &&isGround)
             anim.SetBool("isJump", false);
 
         if (Input.GetButtonDown("Jump") && isGround)
@@ -67,6 +72,8 @@ public class PlayerCtrl : MonoBehaviour
             anim.SetBool("isJump", true);
             jump = true;
         }
+
+
 
         if (Input.GetButtonDown("Jump"))
             isLongJump = true;
@@ -77,6 +84,9 @@ public class PlayerCtrl : MonoBehaviour
             fastRun = true;
         else if (Input.GetKeyUp(KeyCode.X))
             fastRun = false;
+
+
+        Debug.Log(rigid.velocity.y);
     }
 
     void FixedUpdate()
@@ -85,8 +95,13 @@ public class PlayerCtrl : MonoBehaviour
         anim.SetFloat("Speed", Mathf.Abs(h));
         anim.SetFloat("Velocity", Mathf.Abs(rigid.velocity.x));
 
-        if (h * rigid.velocity.x < maxSpeed)
+        if (h * rigid.velocity.x < maxSpeed &&!isFront)
             rigid.AddForce(Vector2.right * h * moveForce);
+
+        if (h > 0 && !dirRight)
+            Flip();
+        else if (h < 0 && dirRight)
+            Flip();
 
         //최대속도보다 빨라지지않도록 속도를 제한함
         if (Mathf.Abs(rigid.velocity.x) > maxSpeed)
@@ -108,5 +123,13 @@ public class PlayerCtrl : MonoBehaviour
         else
             maxSpeed = 5f;
 
+    }
+
+    void Flip()
+    {
+        dirRight = !dirRight;
+        Vector3 sacle = this.transform.localScale;
+        sacle.x *= -1;
+        this.transform.localScale = sacle;
     }
 }
