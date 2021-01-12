@@ -5,10 +5,9 @@ using UnityEngine;
 public class FollowCamera : MonoBehaviour
 {
     Transform player;
-    public Vector2 maxPos;
-    public Vector2 minPos;
+    public Vector2 maxPos;//카메라이동최대거리
+    Vector2 minPos;//카메라이동최소거리
     Vector2 startPos;//카메라의 시작포지션
-    public Vector2 firstminPos;
     public float xMargin;      // 카메라가 Player의 X좌표로 이동하기 전에 체크하는 Player와 Camera의 거리 값
     
     //public float yMargin = 1f;      // 카메라가 Player의 Y좌표로 이동하기 전에 체크하는 Player와 Camera의 거리 값
@@ -19,9 +18,8 @@ public class FollowCamera : MonoBehaviour
 
     void Awake()
     {
-        startPos = transform.position;
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        firstminPos = minPos;
+        startPos = transform.position;
     }
     bool CheckXmargin()
     {
@@ -57,7 +55,7 @@ public class FollowCamera : MonoBehaviour
             targetX = Mathf.Lerp(transform.position.x, player.position.x, xSmooth * Time.fixedDeltaTime);
         }
        
-        minPos.x = (firstminPos.x + Mathf.Abs(transform.position.x - startPos.x));
+        minPos.x = (startPos.x + Mathf.Abs(transform.position.x - startPos.x));
 
         //if (CheckYMargin())
         //    targetY = Mathf.Lerp(transform.position.y, player.position.y, ySmooth * Time.fixedDeltaTime);
