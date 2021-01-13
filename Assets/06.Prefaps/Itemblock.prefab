@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 2707780070069317608}
   - component: {fileID: 2707780070069317607}
   - component: {fileID: 2707780070069317610}
-  - component: {fileID: 2707780070069317612}
   - component: {fileID: 2707780070069317601}
+  - component: {fileID: 8013288587886894245}
   m_Layer: 0
   m_Name: Itemblock
   m_TagString: block
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1323475637
   m_SortingLayer: 1
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -2525698732971785204, guid: ad855561a3398cd44b915ebea706b420,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -124,32 +124,6 @@ MonoBehaviour:
   - {fileID: 8988662535123333721, guid: 4bcd9254412bd34439b423b7a468ccdf, type: 3}
   noDropBlcok: {fileID: -549073503260468556, guid: ad855561a3398cd44b915ebea706b420,
     type: 3}
---- !u!61 &2707780070069317612
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2707780070069317606}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.47}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.0618459}
-  m_EdgeRadius: 0
 --- !u!61 &2707780070069317601
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -176,3 +150,21 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.979522, y: 1.0055122}
   m_EdgeRadius: 0
+--- !u!68 &8013288587886894245
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2707780070069317606}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.5}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: -0.3, y: 0}
+  - {x: 0.3, y: 0}

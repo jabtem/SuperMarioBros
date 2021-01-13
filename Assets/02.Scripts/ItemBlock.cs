@@ -11,6 +11,7 @@ public class ItemBlock : MonoBehaviour
     public int itemNum;
     public float bounceForce;//캐릭터와 부딫히면 살짝 튕기는힘
     bool isbounce = false;
+    bool mushRoomShow = false;
     float gravity = 9.8f; //튕겼다가 다시돌아올 힘(중력)
     float bounceTime = 0.0f;
     //아이템 프리펩 연결할 배열
@@ -37,6 +38,25 @@ public class ItemBlock : MonoBehaviour
     {
         if (isbounce)
             Bounce();
+
+        //버섯은 블록이 튕기고 돌아간후에 생성한다
+        if(!isbounce && mushRoomShow)
+        {
+            switch (itemNum)
+            {
+                //성장버섯
+                case 0:
+                    Instantiate(items[0], new Vector3(transform.position.x, transform.position.y + 1.1f, transform.position.z), Quaternion.identity);
+                    mushRoomShow = false;
+                    break;
+                //라이프업
+                case 1:
+                    Instantiate(items[1], new Vector3(transform.position.x, transform.position.y + 1.1f, transform.position.z), Quaternion.identity);
+                    mushRoomShow = false;
+                    break;
+            }
+        }
+
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -46,17 +66,7 @@ public class ItemBlock : MonoBehaviour
         {
             anim.SetBool("canDrop", false);
             isbounce = true;
-            switch (itemNum)
-            {
-                //성장버섯
-                case 0:
-                    Instantiate(items[0], new Vector3(transform.position.x, transform.position.y + 1.1f, transform.position.z), Quaternion.identity);
-                    break;
-                //라이프업
-                case 1:
-                    Instantiate(items[1], new Vector3(transform.position.x, transform.position.y + 1.1f, transform.position.z), Quaternion.identity);
-                    break;
-            }   
+
         }
     }
     void Bounce()
@@ -69,6 +79,7 @@ public class ItemBlock : MonoBehaviour
         if (height < 0.0f)
         {
             isbounce = false;
+            mushRoomShow = true;
             bounceTime = 0.0f;
             transform.position = startPos;
         }

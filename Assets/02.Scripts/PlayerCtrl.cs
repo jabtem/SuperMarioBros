@@ -9,6 +9,8 @@ public class PlayerCtrl : MonoBehaviour
     public float moveForce = 100f;
     public float jumpForce = 500f;
 
+    public int state = 0;//캐릭터가 현재 작은상태,큰상태인지 구분하기위한변수 0:기본, 1: 버섯먹음
+
     //긴점프
     bool isLongJump = false;
 
@@ -21,6 +23,7 @@ public class PlayerCtrl : MonoBehaviour
 
     Rigidbody2D rigid;
     SpriteRenderer spr;
+    public Collider2D[] cols;
 
     bool jump = false;
 
@@ -35,6 +38,10 @@ public class PlayerCtrl : MonoBehaviour
     //애니메이터
     Animator anim;
 
+    //오디오
+    AudioSource audio;
+    public AudioClip jumpsound;
+
     void Awake()
     {
         rigid = gameObject.GetComponent<Rigidbody2D>();
@@ -42,6 +49,7 @@ public class PlayerCtrl : MonoBehaviour
         anim = gameObject.GetComponent<Animator>();
         groundCheck = GameObject.FindGameObjectWithTag("groundCheck").transform;
         frontCheck = transform.Find("frontCheck").transform;
+        audio = gameObject.GetComponent<AudioSource>();
     }
 
 
@@ -85,8 +93,8 @@ public class PlayerCtrl : MonoBehaviour
         else if (Input.GetKeyUp(KeyCode.X))
             fastRun = false;
 
+        Debug.Log("Velocityx : " + rigid.velocity.x);
 
-        Debug.Log(rigid.velocity.y);
     }
 
     void FixedUpdate()
@@ -99,9 +107,23 @@ public class PlayerCtrl : MonoBehaviour
             rigid.AddForce(Vector2.right * h * moveForce);
 
         if (h > 0 && !dirRight)
+        {
             Flip();
+            if (Mathf.Abs(rigid.velocity.x) > 2)
+            {
+                anim.SetTrigger("Flip");
+            }
+        }
+
         else if (h < 0 && dirRight)
+        {
             Flip();
+            if (Mathf.Abs(rigid.velocity.x) > 2)
+            {
+                anim.SetTrigger("Flip");
+            }
+        }
+            
 
         //최대속도보다 빨라지지않도록 속도를 제한함
         if (Mathf.Abs(rigid.velocity.x) > maxSpeed)
@@ -131,5 +153,16 @@ public class PlayerCtrl : MonoBehaviour
         Vector3 sacle = this.transform.localScale;
         sacle.x *= -1;
         this.transform.localScale = sacle;
+    }
+
+    //플레이어의 상태반환
+    public int get_State()
+    {
+        return state;
+    }
+
+    void PlayJumpSound()
+    {
+        audio.PlayOneShot(jumpsound, 1f);
     }
 }
