@@ -62,4 +62,13 @@ public class mushroomMove : MonoBehaviour
         postion.x *= -1;
         frontCheck.localPosition = postion;
     }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            ScoreManager.instance.GetScore(transform.position,1000);
+            Destroy(gameObject);
+        }
+    }
 }

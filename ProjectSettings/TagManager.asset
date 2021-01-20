@@ -10,6 +10,12 @@ TagManager:
   - growUp
   - lifeUp
   - block
+  - mush
+  - ground
+  - turtle
+  - Music
+  - Flag
+  - Exit
   layers:
   - Default
   - TransparentFX
@@ -23,7 +29,7 @@ TagManager:
   - Pipe
   - Item
   - Player
-  - 
+  - Enemy
   - 
   - 
   - 
@@ -52,4 +58,7 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 651699301
+    locked: 0
+  - name: Enemy
+    uniqueID: 2006374337
     locked: 0

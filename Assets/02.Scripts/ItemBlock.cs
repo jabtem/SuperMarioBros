@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ItemBlock : MonoBehaviour
 {
-    //이블럭이 보유한 아이템넘버 0:성장버섯, 1:라이프업버섯, 2:불꽃 , 3:별, 4:동전
+    //이블럭이 보유한 아이템넘버 0:성장버섯, 1:라이프업버섯, 2:코인, 3:멀티코인
 
     SpriteRenderer spr;
     Animator anim;
@@ -14,6 +14,7 @@ public class ItemBlock : MonoBehaviour
     bool mushRoomShow = false;
     float gravity = 9.8f; //튕겼다가 다시돌아올 힘(중력)
     float bounceTime = 0.0f;
+    int cnt;
     //아이템 프리펩 연결할 배열
     public GameObject[] items;
 
@@ -32,6 +33,7 @@ public class ItemBlock : MonoBehaviour
     void Start()
     {
         startPos = transform.position;
+        cnt = (itemNum == 3) ? 3 : 0;
     }
 
     void Update()
@@ -61,12 +63,24 @@ public class ItemBlock : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
+        cnt--;
         //플레이어가 점프도중 아이템블록과 충돌시, 단 블럭이 캐릭터보다 위에있을경우
         if (collision.gameObject.tag == "Player"&& transform.position.y > collision.transform.position.y && anim.GetBool("canDrop"))
         {
-            anim.SetBool("canDrop", false);
+            if(spr.enabled==false)
+            {
+                spr.enabled = true;
+            }
+            if(cnt < 1)
+                anim.SetBool("canDrop", false);
             isbounce = true;
-
+            switch(itemNum)
+            {
+                case 2:
+                case 3:
+                    Instantiate(items[2], new Vector3(transform.position.x, transform.position.y + 1.1f, transform.position.z), Quaternion.identity);
+                    break;
+            }
         }
     }
     void Bounce()
