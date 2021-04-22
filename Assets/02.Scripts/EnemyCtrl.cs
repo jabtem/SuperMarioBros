@@ -19,7 +19,7 @@ public class EnemyCtrl : MonoBehaviour
     bool On = false;
     int bounceCnt = 5;
     bool canMove = false;//이동가능여부 뷰포트 안에 들어와야 이동이 가능하게 만들며 죽으면 다시 이동불가로 변경
-    int state = 0;//거북이의 상태구분용 0:기본 1:숨음 2:죽음
+    public int state = 0;//거북이의 상태구분용 0:기본 1:숨음 2:죽음
 
     void Awake()
     {
@@ -126,11 +126,13 @@ public class EnemyCtrl : MonoBehaviour
                 collision.rigidbody.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
 
             gameObject.GetComponent<AudioSource>().PlayOneShot(Sound[1], 1f);
-            state = 2;
+            StartCoroutine(ChangeState(2));
             anim.SetTrigger("Die");
             dir = transform.position.x - collision.transform.position.x >0 ? 1: -1;
             canMove = true;
             moveSpeed *= 4;
+
+            //StartCoroutine(Delete());
         }
 
 
@@ -141,5 +143,16 @@ public class EnemyCtrl : MonoBehaviour
         //1초뒤에 오브젝트 삭제
         yield return new WaitForSeconds(1);
         Destroy(gameObject);
+    }
+
+    public int GetState()
+    {
+        return state;
+    }
+
+    IEnumerator ChangeState(int num)
+    {
+        yield return new WaitForSeconds(0.5f);
+        state = num;
     }
 }

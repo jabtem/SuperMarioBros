@@ -228,22 +228,27 @@ public class PlayerCtrl : MonoBehaviour
         }
         else if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy") && gameObject.transform.position.y <= collision.transform.position.y)
         {
-            switch(state)
+            EnemyCtrl enemy = collision.gameObject.GetComponent<EnemyCtrl>();//부딫힌 적의정보
+            if(enemy.GetState()!=1)
             {
-                case 0:
-                    anim.SetTrigger("Die");
-                    PlaySound(4);
-                    cols[0].isTrigger = true;
-                    isalive = false;
-                    rigid.gravityScale = 0;
-                    rigid.velocity = Vector2.zero;
-                    StartCoroutine(Die());
-                    break;
-                case 1:
-                    anim.SetTrigger("Damaged");
-                    break;
+                switch (state)
+                {
+                    case 0:
+                        anim.SetTrigger("Die");
+                        PlaySound(4);
+                        cols[0].isTrigger = true;
+                        isalive = false;
+                        rigid.gravityScale = 0;
+                        rigid.velocity = Vector2.zero;
+                        StartCoroutine(Die());
+                        break;
+                    case 1:
+                        anim.SetTrigger("Damaged");
+                        state = 0;
+                        anim.SetInteger("State", state);
+                        break;
+                }
             }
-
         }
     }
 
