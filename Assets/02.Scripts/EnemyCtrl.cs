@@ -152,7 +152,7 @@ public class EnemyCtrl : MonoBehaviour
 
     IEnumerator ChangeState(int num)
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.01f);
         state = num;
     }
 }
